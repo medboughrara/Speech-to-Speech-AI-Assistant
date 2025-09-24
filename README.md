@@ -153,7 +153,16 @@ The system includes robust error handling for:
 
 ## License
 
-[Your chosen license]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+This means you can:
+- ✅ Use the code commercially
+- ✅ Modify the code
+- ✅ Distribute the code
+- ✅ Use the code privately
+- ✅ Use the code for patent purposes
+
+The only requirement is that you include the original copyright and license notice in any copy of the code.
 
 ## Acknowledgments
 
