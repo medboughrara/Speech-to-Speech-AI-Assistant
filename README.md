@@ -14,11 +14,25 @@ A voice-interactive AI assistant that uses state-of-the-art models for speech re
 
 ## Requirements
 
+### Software Requirements
 - Python 3.10 or later
-- NVIDIA GPU with CUDA support (optional but recommended)
+- CUDA 12.8 or later
+- cuDNN 9.7.1 or later
+- Ollama for running the Gemma model
+
+### Hardware Requirements
+- NVIDIA GPU (NVIDIA GeForce RTX 3050 6GB or better recommended)
+- 16GB RAM minimum (32GB recommended)
 - Microphone for audio input
 - Speakers for audio output
-- Ollama for running the Gemma model
+
+### Python Package Dependencies
+- torch >= 2.1.0 (with CUDA support)
+- faster-whisper >= 0.9.0
+- TTS >= 0.21.1
+- sounddevice >= 0.4.6
+- numpy >= 1.24.0
+- requests >= 2.31.0
 
 ## Installation
 
@@ -62,19 +76,71 @@ python s2s.py
 4. After the wake word is detected, speak your question or command
 5. The assistant will process your speech, generate a response, and speak it back to you
 
-## Models Used
+## Technical Specifications
 
-- **Speech Recognition**: Whisper (base model)
-- **Language Processing**: Gemma 3 4B
-- **Text-to-Speech**: Glow-TTS with LJSpeech voice
+### Models Used
+- **Speech Recognition**: 
+  - Model: Whisper (base model)
+  - Size: ~1.5GB
+  - Implementation: faster-whisper with CTranslate2
+  - Compute: FP16 on GPU, FP32 fallback on CPU
 
-## Configuration
+- **Language Processing**:
+  - Model: Gemma 3 4B
+  - Size: ~4GB
+  - Implementation: Ollama API
+  - Parameters: 
+    - Temperature: 0.7
+    - Top-p: 0.9
+    - Maximum tokens: 500
+    - Response timeout: 120s
 
-The system is configured for optimal performance with:
-- 20-second input window
-- High-accuracy speech recognition
-- Detailed AI responses
-- Natural-sounding speech synthesis
+- **Text-to-Speech**:
+  - Model: Glow-TTS with LJSpeech voice
+  - Implementation: Coqui TTS
+  - Audio settings:
+    - Sample rate: 22050 Hz
+    - Mel channels: 80
+    - FFT size: 1024
+    - Hop length: 256
+
+### Performance Settings
+- Wake word detection: 5-second windows
+- Main input window: 20 seconds
+- Whisper beam size: 5 (for better accuracy)
+- Word timestamps enabled
+- GPU acceleration enabled for all models when available
+
+## System Configuration
+
+### Audio Configuration
+- Input settings:
+  - Channels: Mono (1 channel)
+  - Sample rate: 16000 Hz for STT, 22050 Hz for TTS
+  - Data type: float32
+  - Low-latency mode enabled
+  - Automatic device selection
+
+### Model Configuration
+- Whisper:
+  - Base model for optimal speed/accuracy balance
+  - CUDA-accelerated inference
+  - FP16 precision on GPU
+  - Automatic CPU fallback with FP32
+
+- Gemma:
+  - 4B parameter model
+  - JSON API interface
+  - Streaming disabled for reliability
+  - Context-aware conversation handling
+  - Natural language prompting
+
+- TTS:
+  - Glow-TTS architecture
+  - LJSpeech voice model
+  - Multi-band MelGAN vocoder
+  - GPU-accelerated synthesis
+  - Text normalization enabled
 
 ## Error Handling
 
